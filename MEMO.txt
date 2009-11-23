@@ -1,0 +1,82 @@
+
+exp = exp exp
+    | exp "|" exp
+    | exp "*"
+    | "(" exp ")"
+    | [:alnum]
+    | "\" *
+    | ""
+----
+exp  =
+     | "(" exp ")" exp0
+     | [:alnum] exp0
+     | "\" * exp0
+     | exp0
+exp0 =
+     | "|" exp exp0
+     | "*" exp0
+     | "(" exp ")" exp0 exp0
+     | [:alnum] exp0 exp0
+     | "\" * exp0 exp0
+     | exp0 exp0
+     | ""
+----
+exp  =
+     | "(" exp ")" exp0
+     | [:alnum] exp0
+     | "\" * exp0
+     | exp0
+exp0 =
+     | "|" exp exp0
+     | "*" exp0
+     | "(" exp ")" exp0 exp0
+     | [:alnum] exp0 exp0
+     | "\" * exp0 exp0
+/*     | exp0 exp0 */
+     | ""
+exp1 =
+----
+exp     = pattern*
+pattern = exp "|" exp
+        | exp "*"
+        | "(" exp ")"
+        | [:alnum]
+        | "\" *
+        | ""
+
+-----
+ab*c
+a*b
+
+
+-----
+
+state = start;
+curr = beg;
+while (curr < end) {
+  int ch = *curr;
+  switch (state) {
+  case 0:
+    switch(ch) {
+    case 'a':
+      state = next_state_for_a;
+      break;
+    case 'b':
+      ....
+    default:
+      return false;
+    }
+  case 1:
+    ....
+  defalt:
+    // should not reached.
+    false;
+  }
+  curr++;
+}
+
+return acceptings[state];
+----
+return false する block
+default 用の dummy block
+----
